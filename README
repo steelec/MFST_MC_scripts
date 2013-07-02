@@ -1,0 +1,5 @@
+Jul 02, 2013
+Chris Steele
+
+Git repository to keep track of data processing scripts for MFST_MC.
+Currently updated to include chunking.
