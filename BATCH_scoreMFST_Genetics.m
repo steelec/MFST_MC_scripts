@@ -7,8 +7,9 @@
 % was 19750909
 
 % %setup basic path information
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
-dataDir='/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/source/bx/pilot/';
+
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+dataDir='/scr/alaska1/steele/Projects/Working/MFST_Genetics/source/bx/pilot/';
 
 %initialise vars for creation of xml file.
 LRNSeqID=2; %set the index for the location (0-based) of the LRN sequence used in this experiment - essentially hard-coded b/c this is the first sequence slot available after the two familiarisation sequences
@@ -163,7 +164,7 @@ PPs.stimuli.scoring.d10b4(PPs.stimuli.id.d10b4~=2,:)=allSeq(292:295,:);
 PPs.stimuli.scoring.d10b5(PPs.stimuli.id.d10b5~=2,:)=allSeq(296:299,:);
 PPs.stimuli.scoring.d10b6(PPs.stimuli.id.d10b6~=2,:)=allSeq(300:303,:);
 
-%save('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
+%save('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
 
 %% the code here was used to figure out which sequences to use as LRN2... LRN5
 % basically I tried to ensure that the sequences were as different as
@@ -281,10 +282,10 @@ LRN_idx5=55;
 % the possible sequences, starting from 1 (LRN1) which is index 2 for
 % scoring and use in configurations xml file.
 
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
 
-load('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
-dataDir='/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/source/bx/pilot2';
+load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
+dataDir='/scr/alaska1/steele/Projects/Working/MFST_Genetics/source/bx/pilot2';
 
 IDs={'Pilot01' 'Pilot02' 'Pilot03' 'Pilot04' 'Pilot05' 'Pilot06' 'Pilot07' 'Pilot08' 'Pilot09'}; %ids of the individuals who will be scored, corresponds to head of filename to be loaded ['IDs{1}' '_dXrY.txt']
 %IDs={'Pilot03' 'Pilot06' 'Pilot07' 'Pilot09'}; %ids of those who completed an extra 2 sequences (4 more days) with bilateral m1 stim vs sham
@@ -366,16 +367,16 @@ clear ID theID
 MFST_MC_plotData2(PPs,1,doTFR,trialSelect,numTrialSelect);
 MFST_MC_plotData2(PPs,2,doTFR,trialSelect,numTrialSelect);
 
-%save('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot2.mat');
+%save('/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot2.mat');
 
 %% PILOT3 data that was collected primarily by Elli K, with help from Chris S
 % This data was properly collected and had LM1 anode and RM1 cathode or
 % sham, within-subjects design with 10 pilots (2 days of training per
 % condition)
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
 
-load('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
-dataDir='/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/source/bx/pilot3';
+load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
+dataDir='/scr/alaska1/steele/Projects/Working/MFST_Genetics/source/bx/pilot3';
 
 IDs={'Pilot10' 'Pilot11' 'Pilot12' 'Pilot13' 'Pilot14' 'Pilot15' 'Pilot16' 'Pilot17' 'Pilot18' 'Pilot19' 'Pilot20'}; %ids of the individuals who will be scored, corresponds to head of filename to be loaded ['IDs{1}' '_dXrY.txt']
 IDs={'Pilot10' 'Pilot11' 'Pilot12' 'Pilot13' 'Pilot14' 'Pilot15' 'Pilot16' 'Pilot17' 'Pilot18' 'Pilot19' 'Pilot20' 'Pilot22' 'Pilot23' 'Pilot24'}; %ids of the individuals who will be scored, corresponds to head of filename to be loaded ['IDs{1}' '_dXrY.txt']
@@ -461,13 +462,13 @@ PPs=MFST_MC_scoreRNDblockDataMatrix2(PPs,IDs,days,famil_blocks); % for scoring i
 MFST_MC_plotData2(PPs,1,doTFR,trialSelect,numTrialSelect);
 MFST_MC_plotData2(PPs,2,doTFR,trialSelect,numTrialSelect);
 
-%save('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/processing/bx/2013_07_MFST_Genetics_Pilot3.mat');
-%fprintf('The scored data has been saved to: %s\n','/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot3.mat');
+%save('/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_07_MFST_Genetics_Pilot3.mat');
+%fprintf('The scored data has been saved to: %s\n','/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot3.mat');
 
-%% Working with Pilot3 data, norming it so that we can compare the two sets of days (1-2 with stim, to 3-4 without)
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+%% Working with Pilot3 data, norming it so that we can compare the two sets of days (1-2 without stim, to 3-4 with)
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
 
-load('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/processing/bx/2013_07_MFST_Genetics_Pilot3.mat');
+load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_07_MFST_Genetics_Pilot3.mat');
 
 [CORm CORsd CORn]=MFST_MC_selectData(PPs.all.data.LRN,1,'Individual','Block',false);
 [SYNm SYNsd SYNn]=MFST_MC_selectData(PPs.all.data.LRN,2,'Individual','Block',false);
@@ -739,25 +740,124 @@ clear tDCSdata;
 
 figure('name','Mean SYN for LRN trials for sham (black) and stim (red)');
 hold on
-%plot(nanmean(SYNm(:,1:120)),'ko-');
-plot(nanmean(rSYNm(:,1:48)),'bx-');
-%plot(nanmean(SYNm(:,121:240)),'ro-');
-plot(nanmean(rSYNm(:,49:96)),'gs-');
+plot(nanmean(SYNm(:,1:120)),'ko-');
+%plot(nanmean(rSYNm(:,1:48)),'bx-');
+plot(nanmean(SYNm(:,121:240)),'ro-');
+%plot(nanmean(rSYNm(:,49:96)),'gs-');
 
 figure('name','Mean COR for LRN trials for sham (black) and stim (red)');
 hold on
-%plot(nanmean(CORm(:,1:120)),'ko-');
-plot(nanmean(rCORm(:,1:48)),'bx-');
-%plot(nanmean(CORm(:,121:240)),'ro-');
-plot(nanmean(rCORm(:,49:96)),'gs-');
+plot(nanmean(CORm(:,1:120)),'ko-');
+%plot(nanmean(rCORm(:,1:48)),'bx-');
+plot(nanmean(CORm(:,121:240)),'ro-');
+%plot(nanmean(rCORm(:,49:96)),'gs-');
 
 
+%% create data format for input to SPSS for linear mixed modeling (LRN trials)
+trials_per_block=10;
+blocks_per_day = 6;
+days_per_experiment = 2;
+days_per_condition = 2;
+
+trials=repmat(1:trials_per_block,1,blocks_per_day*days_per_condition*days_per_experiment);
+
+blocks=[];
+
+%blocks for each day
+for idx=1:blocks_per_day
+    blocks=[blocks repmat(idx,1,trials_per_block)];
+end
+blocks=repmat(blocks,1,days_per_condition*days_per_experiment);
+
+days = [];
+for idx=1:days_per_experiment
+    days=[days repmat(idx,1,trials_per_block*blocks_per_day)];
+end
+days=repmat(days,1,days_per_condition);
+
+%conditions for each experiment (w/in Ss)
+conditions=[];
+for idx=1:days_per_condition
+    conditions=[conditions repmat(idx,1,trials_per_block*blocks_per_day*days_per_condition)];
+end
+
+%same for the IDs
+the_IDs=[];
+for idx=1:length(IDs)
+    new_ID=repmat(str2num(IDs{idx}(6:end)),1,trials_per_block*blocks_per_day*days_per_experiment*days_per_condition);
+    the_IDs=[the_IDs new_ID];
+end
+
+conditions_per_ID=[conditions;days;blocks;trials];
+SPSS_conditions=[the_IDs; repmat(conditions_per_ID,1,length(IDs))];
+
+CORm=CORm';
+SYNm=SYNm';
+SPSS_CORm=[SPSS_conditions' CORm(:) SYNm(:)];
+
+CORm_filt=CORm;
+CORm_filt(CORm<std(CORm(:))/sqrt(14)*2)=NaN;
+CORm_filt=CORm_filt(:);
+clear trials blocks days conditions idx
+
+%another way, trials for each individual
+trials1=repmat(1:240,1,length(PPs.IDs))'; 
+%trials for each condition
+trials2=repmat([1:120 1:120],1,length(PPs.IDs))'; 
+
+%% create data format for input to SPSS for linear mixed modeling (RND trials)
+
+trials_per_block=4;
+blocks_per_day = 6;
+days_per_experiment = 2;
+days_per_condition = 2;
+
+trials=repmat(1:trials_per_block,1,blocks_per_day*days_per_condition*days_per_experiment);
+
+blocks=[];
+
+%blocks for each day
+for idx=1:blocks_per_day
+    blocks=[blocks repmat(idx,1,trials_per_block)];
+end
+blocks=repmat(blocks,1,days_per_condition*days_per_experiment);
+
+days = [];
+for idx=1:days_per_experiment
+    days=[days repmat(idx,1,trials_per_block*blocks_per_day)];
+end
+days=repmat(days,1,days_per_condition); 
+
+%conditions for each experiment (w/in Ss)
+conditions=[];
+for idx=1:days_per_condition
+    conditions=[conditions repmat(idx,1,trials_per_block*blocks_per_day*days_per_condition)];
+end
+
+%same for the IDs
+the_IDs=[];
+for idx=1:length(IDs)
+    new_ID=repmat(str2num(IDs{idx}(6:end)),1,trials_per_block*blocks_per_day*days_per_experiment*days_per_condition);
+    the_IDs=[the_IDs new_ID];
+end
+
+conditions_per_ID=[conditions;days;blocks;trials];
+SPSS_conditions=[the_IDs; repmat(conditions_per_ID,1,length(IDs))];
+
+rCORm=rCORm';
+rSYNm=rSYNm';
+
+rSPSS_out=[SPSS_conditions' rCORm(:) rSYNm(:) rCORm(:)./rSYNm(:)];
+%another way, trials for each individual
+trials1=repmat(1:96,1,length(PPs.IDs))'; 
+%trials for each condition
+trials2=repmat([1:48 1:48],1,length(PPs.IDs))'; 
 %% work with the processed data from Pilot2 (4 Ps)
 % plot LRN vs bracketed RND trials
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
 
 
-load('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot2.mat');
+load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot2.mat');
 
 figure('name','LRN sequence performance by block bracketed by RND famil blocks');
 %total blocks over the experiment
@@ -1359,9 +1459,9 @@ fprintf('  SI: t=%f.2, p=%f.2\n',stats.tstat, p);
 % the possible sequences, starting from 1 (LRN1) which is index 2 for
 % scoring and use in configurations xml file.
 
-addpath('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
-dataDir='/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/source/bx/pilot/';
-load('/home/raid1/steele/Documents/Projects/Working/MFST_Genetics/scripts/matlab/2013_02_MFST_Genetics_ScoringSetup_FINAL.mat');
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+dataDir='/scr/alaska1/steele/Projects/Working/MFST_Genetics/source/bx/pilot/';
+load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_02_MFST_Genetics_ScoringSetup_FINAL.mat');
 
 IDs={'Pilot_00' 'Pilot_01' 'Pilot_02' 'Pilot_03'}; %ids of the individuals who will be scored, corresponds to head of filename to be loaded ['IDs{1}' '_dXrY.txt']
 IDs={'CS'}; 
