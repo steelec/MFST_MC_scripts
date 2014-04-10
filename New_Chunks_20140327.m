@@ -1,4 +1,4 @@
-function PPs = New_Chunks_201403(PPs,showImages)
+function PPs = New_Chunks_20140327(PPs,showImages)
 % MFST @ BNI 2012 analysis
 % Calculate and save new chunking data from existing PPs file
 % Joseph Thibodeau 2014
@@ -25,6 +25,9 @@ chunkSizeRND = [];
 
 numChunksMean = [];
 chunkSizeMean = [];
+
+metaNumChunks = zeros(length(IDs),length(Days));
+metaChunkSize = metaNumChunks;
 
 % FOR EACH SUBJECT
 for (ID = 1:length(IDs))
@@ -80,12 +83,13 @@ for (ID = 1:length(IDs))
             end
         end
         RNDstd = std(tempRND(~isnan(tempRND)));
-        
+        RNDmean = mean(tempRND(~isnan(tempRND)));
+            
         % FOR EACH TRIAL (row)
         for (trial = 1:size(lags,1))
         
             % FIND the chunk sizes and locations in this trial
-            sumChunks = findChunksInTrial(lags(trial,:),RNDstd);
+            sumChunks = findChunksInTrial_20140327(lags(trial,:),RNDmean,RNDstd);
             chk_full(trial,:) = sumChunks;
             
             % ACCUMULATE the number of chunks and their average size in
@@ -132,8 +136,8 @@ for (ID = 1:length(IDs))
     
     % NOW DO THE SAME ELEMENT-BY-ELEMENT ALGORITHM AS BEFORE
     % BUT ON THE DAILY MEANS
-    dayChkLRN = findChunksInTrial(meanLRN,0);
-    dayChkRND = findChunksInTrial(meanRND,0);
+    dayChkLRN = findChunksInTrial_20140327(meanLRN,RNDmean,RNDstd);
+    dayChkRND = findChunksInTrial_20140327(meanRND,RNDmean,RNDstd);
     
     
     % SAVE OUTPUT STRUCTURES
@@ -168,17 +172,37 @@ for (ID = 1:length(IDs))
         imshow(comboImg);
     end
     
-    
-    
     % END FOR DAY
     end
     
     if(showImages == 1)
         % SAVE VISUALIZATION
-        saveas(currentFigure,['../' IDs{ID} '_chk.jpg']);
+        saveas(currentFigure,['pics/' IDs{ID} '_chk.jpg']);
     end
     
 % END FOR SUBJECT
+end
+
+if(showImages == 1)
+    % PLOT OVERALL CHUNKING VARIABLES
+    figure(ID + 1)
+    subplot(2,1,1)
+    stairs(chunkSizeMean');
+    hold on;
+    temp = plot(nanmean(chunkSizeMean),'--k');
+    set(temp,'LineWidth',2.0);
+    hold off;
+    title('Chunk Size');
+    grid on;
+    subplot(2,1,2)
+    
+    stairs(numChunksMean');
+    hold on;
+    temp = plot(nanmean(numChunksMean),'--k');
+    set(temp,'LineWidth',2.0);
+    hold off;
+    title('Num Chunks');
+    grid on;
 end
 
 x = 'put a breakpoint here to play with data'
