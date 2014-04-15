@@ -375,7 +375,8 @@ MFST_MC_plotData2(PPs,2,doTFR,trialSelect,numTrialSelect);
 % condition)
 addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
 
-load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
+%load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat');
+load('/home/raid1/steele/Documents/Projects/Working/Scripts/MFST/MC_and_Genetics/matlab/2013_03_MFST_Genetics_ScoringSetup_FINAL.mat')
 dataDir='/scr/alaska1/steele/Projects/Working/MFST_Genetics/source/bx/pilot3';
 
 IDs={'Pilot10' 'Pilot11' 'Pilot12' 'Pilot13' 'Pilot14' 'Pilot15' 'Pilot16' 'Pilot17' 'Pilot18' 'Pilot19' 'Pilot20'}; %ids of the individuals who will be scored, corresponds to head of filename to be loaded ['IDs{1}' '_dXrY.txt']
@@ -466,7 +467,7 @@ MFST_MC_plotData2(PPs,2,doTFR,trialSelect,numTrialSelect);
 %fprintf('The scored data has been saved to: %s\n','/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_03_MFST_Genetics_Pilot3.mat');
 
 %% Working with Pilot3 data, norming it so that we can compare the two sets of days (1-2 without stim, to 3-4 with)
-addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/matlab/'); %path to the scoring scripts
+addpath('/scr/alaska1/steele/Projects/Working/MFST_Genetics/scripts/'); %path to the scoring scripts
 
 load('/scr/alaska1/steele/Projects/Working/MFST_Genetics/processing/bx/2013_07_MFST_Genetics_Pilot3.mat');
 
@@ -752,6 +753,15 @@ plot(nanmean(CORm(:,1:120)),'ko-');
 plot(nanmean(CORm(:,121:240)),'ro-');
 %plot(nanmean(rCORm(:,49:96)),'gs-');
 
+%replace NaNs with something that can be used in an analysis
+SYNm_corrected=SYNm;
+for id=1:length(IDs)
+    for block = 1:6
+        start=(block-1)*10+1
+        stop=start+9
+        SYNm(id,isnan(SYNm(id,:)))=mean(SYNm(id,start:stop));
+    end
+end
 
 %% create data format for input to SPSS for linear mixed modeling (LRN trials)
 trials_per_block=10;
@@ -804,6 +814,34 @@ clear trials blocks days conditions idx
 trials1=repmat(1:240,1,length(PPs.IDs))'; 
 %trials for each condition
 trials2=repmat([1:120 1:120],1,length(PPs.IDs))'; 
+
+%include the ordering of stim vs sham
+total_trials_cond=trials_per_block*blocks_per_day*days_per_experiment;
+tDCS_stim=[]; %ordering of stimulation - 1 for the first experimental condition the P was exposed to, and 2 for the second
+for ID=1:length(IDs)
+    if PPs.tDCS.schedule(ID,1)==1 %if the first day was a tDCS day, 3rd was sham. sham listed 1st in SPSS so 
+        %make that note here first
+        tDCS_stim=[tDCS_stim; ones(total_trials_cond,1)*2; ones(total_trials_cond,1)*1];
+    elseif PPs.tDCS.schedule(ID,1)==2 %if the first day was a sham day, 3rd was tDCS. sham is listed 1st in SPSS so 
+        %make that note here first
+        tDCS_stim=[tDCS_stim; ones(total_trials_cond,1)*1; ones(total_trials_cond,1)*2];
+    end
+end
+
+%same for RND
+total_trials_cond=48;
+tDCS_stim_RND=[]; %ordering of stimulation - 1 for the first experimental condition the P was exposed to, and 2 for the second
+for ID=1:length(IDs)
+    if PPs.tDCS.schedule(ID,1)==1 %if the first day was a tDCS day, 3rd was sham. sham listed 1st in SPSS so 
+        %make that note here first
+        tDCS_stim_RND=[tDCS_stim_RND; ones(total_trials_cond,1)*2; ones(total_trials_cond,1)*1];
+    elseif PPs.tDCS.schedule(ID,1)==2 %if the first day was a sham day, 3rd was tDCS. sham is listed 1st in SPSS so 
+        %make that note here first
+        tDCS_stim_RND=[tDCS_stim_RND; ones(total_trials_cond,1)*1; ones(total_trials_cond,1)*2];
+    end
+end
+
+clear total_trials_cond, ID;
 
 %% create data format for input to SPSS for linear mixed modeling (RND trials)
 

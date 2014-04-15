@@ -1,4 +1,4 @@
-function PPs = New_Chunks_20140327(PPs,showImages)
+function [PPs,chunk_mean,chunk_num] = New_Chunks_20140327(PPs,showImages)
 % MFST @ BNI 2012 analysis
 % Calculate and save new chunking data from existing PPs file
 % Joseph Thibodeau 2014
@@ -50,6 +50,7 @@ for (ID = 1:length(IDs))
     cmd = ['LRNMask = PPs.' IDs{ID} '.results.d' num2str(Days(day)) '.LRNSeqPosn;'];
     eval(cmd);
     %LRNMask = cell2mat(LRNMask);
+    LRNMask=LRNMask'; %need to flip the LRNMask before reshaping to keep the order correctly
     LRNMask = reshape(LRNMask, size(LRNMask,1)*size(LRNMask,2),1);
 
     % CREATE OUTPUT STRUCTURES
@@ -84,7 +85,15 @@ for (ID = 1:length(IDs))
         end
         RNDstd = std(tempRND(~isnan(tempRND)));
         RNDmean = mean(tempRND(~isnan(tempRND)));
-            
+        tempRND2=tempRND(~isnan(tempRND));
+        RNDmean_filt= mean(tempRND2(tempRND2 < RNDmean + 2*RNDstd & tempRND2> RNDmean - 2*RNDstd));
+        RNDstd_filt=std(tempRND2(tempRND2 < RNDmean + 2*RNDstd & tempRND2> RNDmean - 2*RNDstd));
+%        figure(999)
+%        hist(tempRND(~isnan(tempRND)));
+        fprintf('RNDmean: %.2f RNDstd: %.2f RNDmean_filt: %.2f RNDstd_filt: %.2f\n std diff: %2.f\n',RNDmean,RNDstd,RNDmean_filt,RNDstd_filt,RNDstd-RNDstd_filt)
+        %RNDmean=RNDmean_filt;
+        %RNDstd=0;
+        
         % FOR EACH TRIAL (row)
         for (trial = 1:size(lags,1))
         
@@ -152,6 +161,8 @@ for (ID = 1:length(IDs))
     
     chunkSizeMean(ID,day) = nanmean(chunkSizeLRN(ID,:));
     numChunksMean(ID,day) = nanmean(numChunksLRN(ID,:));
+    chunkSizeMax(ID,day) = nanmax(chunkSizeLRN(ID,:));
+    numChunksMax(ID,day) = nanmax(numChunksLRN(ID,:));
     
     if(showImages == 1)
         % VISUALIZATION
@@ -183,19 +194,20 @@ for (ID = 1:length(IDs))
 % END FOR SUBJECT
 end
 
-if(showImages == 1)
+if(showImages == 1 || showImages == 0)
     % PLOT OVERALL CHUNKING VARIABLES
-    figure(ID + 1)
+    figure
     subplot(2,1,1)
-    stairs(chunkSizeMean');
+    stairs(chunkSizeMean','-o');
     hold on;
-    temp = plot(nanmean(chunkSizeMean),'--k');
+    temp = errorbar(nanmean(chunkSizeMean),nanstd(chunkSizeMean)/sqrt(length(chunkSizeMean)),'--k');
     set(temp,'LineWidth',2.0);
     hold off;
-    title('Chunk Size');
+    title('Chunk Size (mean)');
     grid on;
-    subplot(2,1,2)
+   
     
+    subplot(2,1,2)
     stairs(numChunksMean');
     hold on;
     temp = plot(nanmean(numChunksMean),'--k');
@@ -203,6 +215,29 @@ if(showImages == 1)
     hold off;
     title('Num Chunks');
     grid on;
+    
+    figure(ID + 2)
+    subplot(2,1,1)
+    stairs(chunkSizeMax','-o');
+    hold on;
+    temp = errorbar(nanmean(chunkSizeMax),nanstd(chunkSizeMax)/sqrt(length(chunkSizeMax)),'--k');
+    set(temp,'LineWidth',2.0);
+    hold off;
+    title('Chunk Size (max)');
+    grid on;
+    
+    subplot(2,1,2)
+    stairs(numChunksMax');
+    hold on;
+    temp = plot(nanmean(numChunksMax),'--k');
+    set(temp,'LineWidth',2.0);
+    hold off;
+    title('Num Chunks (max)');
+    grid on;
 end
+[r,p]=corrcoef(chunkSizeMean,chunkSizeMax);
+fprintf('Correlation between mean chunk size and max chunk size: r=%.2f, p=%.2f\n',r(1,2),p(1,2))
 
+chunk_mean=chunkSizeMean;
+chunk_num=numChunksMean;
 x = 'put a breakpoint here to play with data'

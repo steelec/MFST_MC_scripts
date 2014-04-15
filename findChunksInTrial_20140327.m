@@ -30,7 +30,7 @@ function sumChunks = findChunksInTrial_20140327(this_trial,RNDmean,RNDstd)
         % Are we in a chunk?
         if(isChunking == true)
             % Check if this element is a member of the current chunk
-            if(~isnan(this_RT) && (this_RT < (chunkMean + RNDstd)) && (this_RT < chunkCeiling))
+            if(~isnan(this_RT) && (this_RT < (chunkMean + RNDstd)) && (this_RT < chunkCeiling+RNDstd))
             % If so, add it to the current chunk
                 chunks(elem) = chunkID;
                 % update chunking params

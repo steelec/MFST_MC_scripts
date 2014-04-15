@@ -29,8 +29,8 @@ temp.chunk.settings.makePlots=makePlots; %you figure out what this means yet?
 %%%
 temp.dayAvg=false; %if you want to look at the day rather than the block average
 temp.replaceMissingWithMean=true; %otherwise fill with MAX value (500ms)
-temp.regressOutLinear=true; % regress out a linear trend from the data (probably unecessary with small number of elements in each trial?)
-temp.Mu='allSs_allDays'; % 'allSs_allDays' 'all' %only this or default, which is 'specificSs_specificDays' %'all' 'allSs_specificDays' 'specificSs_allDays' 'specificSs_specificDays' % population average for ttest calculation
+temp.regressOutLinear=false; % regress out a linear trend from the data (probably unecessary with small number of elements in each trial?)
+temp.Mu='all'; % 'allSs_allDays' 'all' %only this or default, which is 'specificSs_specificDays' %'all' 'allSs_specificDays' 'specificSs_allDays' 'specificSs_specificDays' % population average for ttest calculation
 temp.tcrit = abs(tinv(.05,1)); %6.3138 %t-critical for evaluating whether the chunk differed or not
 temp.chunk.settings.xcorrBYtrial=true; %true if you want to calculate the xcorr over each trial, false if you are happy to throw them all into blocks (refer to conversation with Larry on this)
 %%%
