@@ -15,13 +15,16 @@ blocks=6;
 
 clear temp
 clear out
+temp.outBlockMaxSsLRN=[];
+temp.outBlockMaxSsRND=[];
 temp.outTrialMaxSsLRN=[];
 temp.outTrialMaxSsRND=[];
 
 for ID=1:length(PPs.IDs) %loop over subjects
-    temp.outTrialMaxLRN=[];
-    temp.outTrialMaxRND=[];
-    
+    temp.TrialMaxLRN=[];
+    temp.TrialMaxRND=[];
+    temp.BlockMaxLRN=[];
+    temp.BlockMaxRND=[];
     for day=1:length(days) %loop over days    
         %LRN seq position
         cmd = ['LRNmask = PPs.' PPs.IDs{ID} '.results.d' num2str(day) '.LRNSeqPosn;'];
@@ -38,15 +41,50 @@ for ID=1:length(PPs.IDs) %loop over subjects
         temp.chkLRN=temp.chkLRN(logical(LRNmask),:);
         temp.chkRND=temp.chkRND(not(logical(LRNmask)),:);
 
+        %trial-wise calculations of maximum chunk
         temp.chkLRN_trialMax=nanmax(temp.chkLRN'); %max number in a chunk for each trial
         temp.chkRND_trialMax=nanmax(temp.chkRND');
+        temp.TrialMaxLRN=[temp.TrialMaxLRN temp.chkLRN_trialMax];
+        temp.TrialMaxRND=[temp.TrialMaxRND temp.chkRND_trialMax];
         
+        
+        %blockwise calculation of maximum chunk
         temp.chkLRN_block=reshape(temp.chkLRN_trialMax,length(temp.chkLRN_trialMax)/blocks,blocks)'; %now rows for each block, each trial is a column
         temp.chkRND_block=reshape(temp.chkRND_trialMax,length(temp.chkRND_trialMax)/blocks,blocks)'; %now rows for each block, each trial is a column
-        temp.outTrialMaxLRN=[temp.outTrialMaxLRN temp.chkLRN_trialMax];
-        temp.outTrialMaxRND=[temp.outTrialMaxRND temp.chkRND_trialMax];
+        temp.BlockMaxLRN=[temp.BlockMaxLRN max(temp.chkLRN_block,[],2)'];
+        temp.BlockMaxRND=[temp.BlockMaxRND max(temp.chkRND_block,[],2)'];
+
     end
-    temp.outTrialMaxSsLRN=[temp.outTrialMaxSsLRN; temp.outTrialMaxLRN];
-    temp.outTrialMaxSsRND=[temp.outTrialMaxSsRND; temp.outTrialMaxRND];
+    %block-wise, for all subjects
+    temp.outBlockMaxSsLRN=[temp.outBlockMaxSsLRN; temp.BlockMaxLRN];
+    temp.outBlockMaxSsRND=[temp.outBlockMaxSsRND; temp.BlockMaxRND];
+    %trial-wise, for all subjects
+    temp.outTrialMaxSsLRN=[temp.outTrialMaxSsLRN; temp.TrialMaxLRN];
+    temp.outTrialMaxSsRND=[temp.outTrialMaxSsRND; temp.TrialMaxRND];
     %size(temp.outTrialMaxSsLRN);
 end
+
+figure;
+plot(temp.outBlockMaxSsLRN','o:')
+hold on; 
+errorbar(mean(temp.outBlockMaxSsLRN),std(temp.outBlockMaxSsLRN)/sqrt(size(temp.outBlockMaxSsLRN,1)),'ko-','linewidth',3)
+title('Max chunks by block (LRN)');
+
+figure;
+plot(temp.outBlockMaxSsRND','o:')
+hold on; 
+plot(mean(temp.outBlockMaxSsRND),'ko-','linewidth',3)
+title('Max chunks by block (RND)');
+
+
+figure
+hold on; plot(temp.outTrialMaxSsLRN','o:')
+plot(mean(temp.outTrialMaxSsLRN),'ko-','linewidth',3)
+%errorbar(mean(temp.outTrialMaxSsLRN),std(temp.outTrialMaxSsLRN)/sqrt(size(temp.outTrialMaxSsLRN,1)),'ko-','linewidth',3); % adds too much noise to see anything properly
+title('Max chunks by trial (LRN)');
+
+figure
+plot(temp.outTrialMaxSsRND','o:')
+hold on
+plot(nanmean(temp.outTrialMaxSsRND),'ko-','linewidth',3)
+title('Max chunks by trial (RND)');

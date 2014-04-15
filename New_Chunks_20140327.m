@@ -1,4 +1,4 @@
-function [PPs,chunk_mean,chunk_num] = New_Chunks_20140327(PPs,showImages)
+function [PPs,chunk_mean,chunk_num] = New_Chunks_20140327(PPs,showImages,FILTER)
 % MFST @ BNI 2012 analysis
 % Calculate and save new chunking data from existing PPs file
 % Joseph Thibodeau 2014
@@ -8,6 +8,17 @@ function [PPs,chunk_mean,chunk_num] = New_Chunks_20140327(PPs,showImages)
 
 % auto-load, if desired:
 %uiload();
+
+if nargin < 3
+    FILTER=false;
+end
+
+if FILTER
+    fprintf('\n==========================================================================================');
+    fprintf('\nWe have applied a filter of 2*std on the RND sequences to eliminate possible outliers. \nThis seems to make little difference, but it is here anyway.\nPress the any key to continue. (go on, look for it!) ;-) \n');
+    fprintf('==========================================================================================\n');
+    pause
+end
 
 % DEFINE LIST OF SUBJECTS and DAYS
 IDs = PPs.IDs;
@@ -90,9 +101,14 @@ for (ID = 1:length(IDs))
         RNDstd_filt=std(tempRND2(tempRND2 < RNDmean + 2*RNDstd & tempRND2> RNDmean - 2*RNDstd));
 %        figure(999)
 %        hist(tempRND(~isnan(tempRND)));
+        
+        %use this to check what the filter would be if you applied it
         fprintf('RNDmean: %.2f RNDstd: %.2f RNDmean_filt: %.2f RNDstd_filt: %.2f\n std diff: %2.f\n',RNDmean,RNDstd,RNDmean_filt,RNDstd_filt,RNDstd-RNDstd_filt)
-        %RNDmean=RNDmean_filt;
-        %RNDstd=0;
+        
+        if FILTER
+            RNDmean=RNDmean_filt;
+            RNDstd=RNDstd_filt;
+        end
         
         % FOR EACH TRIAL (row)
         for (trial = 1:size(lags,1))
@@ -216,7 +232,7 @@ if(showImages == 1 || showImages == 0)
     title('Num Chunks');
     grid on;
     
-    figure(ID + 2)
+    figure
     subplot(2,1,1)
     stairs(chunkSizeMax','-o');
     hold on;
@@ -240,4 +256,9 @@ fprintf('Correlation between mean chunk size and max chunk size: r=%.2f, p=%.2f\
 
 chunk_mean=chunkSizeMean;
 chunk_num=numChunksMean;
+
+if not(FILTER)
+    fprintf('\n===================== DAMN, Python makes specifying default variables much easier! =====================\n')
+end
+
 x = 'put a breakpoint here to play with data'
