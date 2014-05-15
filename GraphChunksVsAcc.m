@@ -24,7 +24,9 @@ function GraphChunksVsAcc(IDs, Days, chunkSize, numChunks, acc, titleSuffix, sav
     widthMax = 2;
     widthRange = widthMax-widthMin;
     widths = widthMin:widthRange/numD:widthMax;
-    lstyle = '-';
+    
+    lstyles = {'-','--','-.',':'};
+    lstyleMax = 4; %max number of line styles
 
     % scatter plot stuff
     markerMultiplier = 40;
@@ -37,18 +39,19 @@ function GraphChunksVsAcc(IDs, Days, chunkSize, numChunks, acc, titleSuffix, sav
     leg = {};
 
     % overall colormap
-    subjColours = colormap(jet(length(IDs))); %set colormap to 15 (num subjects)
+    subjColours = colormap(hsv(length(IDs))); %set colormap to 15 (num subjects)
 
     currentFigure = figure;
     hold on
     for s = 1:numS
         legs{s} = IDs{s}; %legend handle for this subject
         tc = subjColours(s,:); %this colour
+        lstyle = lstyles{mod(s-1,lstyleMax)+1}; % this line style
         % make a smaller colour map for this subject, with 6 points
         cmap = repmat(tc,numD,1);
         for d = 1:numD
-    %         cmap(d,:) = cmap(d,:)./d./colourDiv + (colourOffset.*(cmap(d,:) > 0)); %includes some fudging to get nicer saturation
-            cmap(d,:) = cmap(d,:)./d./colourDiv + colourOffset; %a little desaturated to go in background
+            cmap(d,:) = cmap(d,:)./d./colourDiv + (colourOffset.*(cmap(d,:) > 0)); %includes some fudging to get nicer saturation
+            %cmap(d,:) = cmap(d,:)./d./colourDiv + colourOffset; %a little desaturated to go in background
         end %making cmap
 
         scatter3(chunkSize(s,:),numChunks(s,:), acc(s,:), markerSizes, cmap, 'filled') % mark the points on this line
@@ -75,10 +78,10 @@ function GraphChunksVsAcc(IDs, Days, chunkSize, numChunks, acc, titleSuffix, sav
 
     % then plot each line segment for this subject with a different colour and thickness
     for d = 1:(numD-1)
-        figs(s+1) = plot3(allCSMeans(d:d+1),allNCMeans(d:d+1), allaccs(d:d+1), 'LineStyle', '--', 'LineWidth', widths(d)*2, 'Color', cmap(d,:));
+        figs(s+1) = plot3(allCSMeans(d:d+1),allNCMeans(d:d+1), allaccs(d:d+1), 'LineStyle', '-', 'LineWidth', widths(d)*2, 'Color', cmap(d,:));
     end %days
 
-    legend(figs,legs);
+    legend(figs,legs,'Location', 'EastOutside');
     xlabel('Chunk Size');
     ylabel('Num Chunks');
     zlabel('Accuracy');
@@ -90,11 +93,11 @@ function GraphChunksVsAcc(IDs, Days, chunkSize, numChunks, acc, titleSuffix, sav
     if (saveViews ~= 0)
         saveas(currentFigure,['pics/AccVsChunking' titleSuffix '.fig']);
         view([90 0]);
-        saveas(currentFigure,['pics/AccVsChunking' titleSuffix '_View1.jpg']);
+        print(currentFigure, '-dpng','-r300',['pics/AccVsChunking' titleSuffix '_View1.png']);
         view([0 0]);
-        saveas(currentFigure,['pics/AccVsChunking' titleSuffix '_View2.jpg']);
+        print(currentFigure, '-dpng','-r300',['pics/AccVsChunking' titleSuffix '_View2.png']);
         view([0 90]);
-        saveas(currentFigure,['pics/AccVsChunking' titleSuffix '_View3.jpg']);
+        print(currentFigure, '-dpng','-r300',['pics/AccVsChunking' titleSuffix '_View3.png']);
     end
     
     view([47 7]);
