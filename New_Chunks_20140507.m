@@ -289,6 +289,7 @@ if not(FILTER)
     fprintf('\n===================== DAMN, Python makes specifying default variables much easier! =====================\n')
 end
 
-tempscripting_20140507
+GraphChunksVsAcc(IDs, Days, chunkSizeMean, numChunksMean, accMean, 'Mean',1)
+GraphChunksVsAcc(IDs, Days, chunkSizeMax, numChunksMax, accMean, 'Max',1)
 
-x = 'put a breakpoint here to play with data'
+x = 'put a breakpoint here to play with data';
