@@ -1,12 +1,16 @@
 load /scr/alaska1/steele/MFST_MC/processing/bx/2013_06_PreprocessedBxData_withCNK.mat
-addpath('/home/raid1/steele/Documents/Projects/Working/Scripts/MFST/MC_and_Genetics/matlab')
+scripts_path='/home/raid1/steele/Documents/Projects/Working/Scripts/MFST/MC_and_Genetics/matlab';
+addpath(scripts_path);
+cd(scripts_path); %we do this so that any output is put directly into the /pics subdirectory
 %restoredefaultpath;
 %rehash toolboxcache;
 %savepath;
 
 %XXX check out how the means are calculated, this seems like it is
 %incorrect. Should be reporting a max for each trial and or block? XXX
-[PPs2 CNK_mean CNK_num]=New_Chunks_20140327(PPs,0) %process chunks with visualisation, data out to /pics dir
+[PPs2 CNK_mean CNK_num]=New_Chunks_20140507(PPs,0) %process chunks with visualisation, data out to /pics dir
+MFST_MC_plotData2(PPs,1,false,false,10)
+MFST_MC_plotData2(PPs,2,false,false,10)
 
 %% now extract the data for LRN and RND for each participant, each trial and then block it for correlational analyses
 PPs=PPs2;
@@ -88,3 +92,15 @@ plot(temp.outTrialMaxSsRND','o:')
 hold on
 plot(nanmean(temp.outTrialMaxSsRND),'ko-','linewidth',3)
 title('Max chunks by trial (RND)');
+
+%% try to understand what it is that these variables are doing over time
+%COR and SYN
+figure;
+plot3(time2(:,:)',SYN(:,:)',COR(:,:)',':o')
+title('COR x SYN x Block 1-36');
+figure;
+plot3(time2(:,1:6)',SYN(:,1:6)',COR(:,1:6)',':o')
+title('COR x SYN x Block 1-6');
+figure;
+plot3(time2(:,31:36)',SYN(:,31:36)',COR(:,31:36)',':o')
+title('COR x SYN x Block 31-36');

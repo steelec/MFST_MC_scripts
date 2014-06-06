@@ -7,7 +7,9 @@ function MFST_MC_plotData2(PPs,measure,doTFR,trialSelect, numTrialSelect)
 % <measure> - numerical ID of behavioural measure to create summary for display
 %             {1,2,3,4,5,6} ->
 %             {Proportion Correct,Lag1 (RT),Lag2 (offset RT),Duration,Velocity,Intertap Interval}
-%
+% <doTFR>   - also process transfer files {true,false}
+% <trialSelect> - select a subset of trials {true,false}
+% <numTrialsSelect> - number of trials to select
 % output:
 %           - displays figure with 2 rows of three plots for behavioural
 %             measure that was requested
